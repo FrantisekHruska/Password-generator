@@ -1,47 +1,44 @@
 import random
 import string as st
 import tkinter as tk
+import pyperclip as ppc
 
 
 class MainWindow(tk.Tk):
-    def __init__(self, screenName=None, baseName=None, className='Tk', useTk=1, sync=0, use=None):
-        super().__init__(screenName=screenName,
-                         baseName=baseName, useTk=useTk, sync=sync, use=use)
-        WIDTH = 620
-        HEIGHT = 130
-        self.title('Password Generator')
-        self.minsize(WIDTH, HEIGHT)
-        self.maxsize(WIDTH, HEIGHT)
-        self.configure(bg='black')
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.minsize(width=580, height=100)
+        self.maxsize(width=600, height=100)
+        self.config(bg='white')
+        self.title("Password generator")
 
 
-def passwdgen(length):
-
-    passwd = ''
-    chars = list(st.ascii_letters+st.digits)
-
-    for i in range(length):
-        passwd += chars[random.randint(0, len(chars)-1)]
-
-    return passwd
-
-
-def create_widgets(master=None, passwordgenerator=None):
-    label_1 = tk.Label(master=master, font=(
-        'Calibri', 40, 'bold'), bg='black', fg='green')
-    label_1.place(x=25, y=25)
-    label_1.config(text=passwordgenerator)
-    # print(time.strftime('%H:%M:%S'))
-    #label_1.after(1000, create_labels)
+class MainApplication(tk.Frame):
+    def __init__(self, parent, *args, **kwargs):
+        super(MainApplication, self).__init__()
+        self.parent = parent
+        self.pack(side="top", fill="both", expand=True)
+        self.configure(bg='white')
+        self.lbl1 = tk.Label(parent, text=password, font=(
+            'Calibri', 25, 'bold'), bg='white')
+        self.lbl1.pack(fill="both")
+        self.btn1 = tk.Button(parent, command=ppc.copy(password))
+        self.btn1.config(text="Copy", bg='white')
+        self.btn1.pack(side="bottom")
 
 
-def main():
-    passlength = int(
-        input("How many characters do you want your password to have? \n"))
-    root = MainWindow()
-    create_widgets(root, passwdgen(passlength))
-    root.mainloop()
+def password_gen():
+    password = ''
+    chars = list(st.ascii_letters + st.digits)
+
+    for i in range(20):
+        password += chars[random.randint(0, len(chars) - 1)]
+
+    return password
 
 
 if __name__ == "__main__":
-    main()
+    root = MainWindow()
+    password = password_gen()
+    app = MainApplication(root)
+    root.mainloop()
