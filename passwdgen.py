@@ -28,13 +28,13 @@ class MainApplication(tk.Frame):
 
 
 def password_gen():
-    password = ''
+    password_str = ''
     chars = list(st.ascii_letters + st.digits)
 
     for i in range(20):
-        password += chars[random.randint(0, len(chars) - 1)]
+        password_str += chars[random.randint(0, len(chars) - 1)]
 
-    return password
+    return password_str
 
 
 if __name__ == "__main__":
