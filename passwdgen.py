@@ -33,24 +33,24 @@ class MainApplication(tk.Frame):
         self.btn1.pack(side="bottom")
 
     def update_password(self):
-        password_local = password_gen()
+        password_local = self.password_gen()
         self.lbl_1.config(text=password_local)
         self.btn1.config(command=ppc.copy(password_local))
         self.lbl_1.pack(fill="both")
 
+    @staticmethod
+    def password_gen():
+        password_str = ''
+        chars = list(st.ascii_letters + st.digits)
 
-def password_gen():
-    password_str = ''
-    chars = list(st.ascii_letters + st.digits)
+        for i in range(20):
+            password_str += chars[random.randint(0, len(chars) - 1)]
 
-    for i in range(20):
-        password_str += chars[random.randint(0, len(chars) - 1)]
+        return password_str
 
-    return password_str
 
 
 if __name__ == "__main__":
     root = MainWindow()
-    #password = password_gen()
     app = MainApplication(root)
     root.mainloop()
