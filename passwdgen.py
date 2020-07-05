@@ -19,12 +19,24 @@ class MainApplication(tk.Frame):
         self.parent = parent
         self.pack(side="top", fill="both", expand=True)
         self.configure(bg='white')
-        self.lbl1 = tk.Label(parent, text=password, font=(
+
+        self.lbl_1 = tk.Label(parent, text=None, font=(
             'Calibri', 25, 'bold'), bg='white')
-        self.lbl1.pack(fill="both")
-        self.btn1 = tk.Button(parent, command=ppc.copy(password))
+
+        self.lbl_1.pack(fill="both")
+
+        self.btn2 = tk.Button(parent, text="Generate", command=self.update_password, bg='white')
+        self.btn2.pack(side="bottom")
+
+        self.btn1 = tk.Button(parent)
         self.btn1.config(text="Copy", bg='white')
         self.btn1.pack(side="bottom")
+
+    def update_password(self):
+        password_local = password_gen()
+        self.lbl_1.config(text=password_local)
+        self.btn1.config(command=ppc.copy(password_local))
+        self.lbl_1.pack(fill="both")
 
 
 def password_gen():
@@ -39,6 +51,6 @@ def password_gen():
 
 if __name__ == "__main__":
     root = MainWindow()
-    password = password_gen()
+    #password = password_gen()
     app = MainApplication(root)
     root.mainloop()
