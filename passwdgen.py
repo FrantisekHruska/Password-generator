@@ -1,13 +1,14 @@
 import random
 import string as st
 import tkinter as tk
+from tkinter import messagebox
 import pyperclip as ppc
 
 
 class MainWindow(tk.Tk):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.geometry('500x150')
+        self.geometry('800x150')
         self.resizable(False, False)
         self.config(bg='white')
         self.title("Password generator")
@@ -21,11 +22,11 @@ class MainApplication(tk.Frame):
         self.pack(side="top", fill="both", expand=True)
         self.configure(bg='lightgreen')
 
-        self.passlength = tk.StringVar()
+        self.passlength = tk.IntVar(parent, value=20)
 
-        self.difficulty_chars = tk.IntVar()
-        self.difficulty_numbers = tk.IntVar()
-        self.difficulty_punctuation = tk.IntVar()
+        self.difficulty_chars = tk.BooleanVar(parent, value=True)
+        self.difficulty_numbers = tk.BooleanVar(parent, value=True)
+        self.difficulty_punctuation = tk.BooleanVar(parent)
 
         self.lbl1 = tk.Label(parent, text=None, font=(
             'Calibri', 25, 'bold'), bg='white')
@@ -42,41 +43,48 @@ class MainApplication(tk.Frame):
         self.btn2 = tk.Button(parent, text="Generate", command=self.update_password, bg='lightgreen')
         self.btn2.pack(side="bottom", fill='x')
 
-        self.lstbox1 = tk.Checkbutton(parent, text="Characters", variable=self.difficulty_chars)
-        self.lstbox1.pack(side="left")
+        self.checkbox_1 = tk.Checkbutton(parent, text="Characters", variable=self.difficulty_chars)
+        self.checkbox_1.pack(side="left")
 
-        self.lstbox2 = tk.Checkbutton(parent, text="Numbers", variable=self.difficulty_numbers)
-        self.lstbox2.pack(side="left")
+        self.checkbox_2 = tk.Checkbutton(parent, text="Numbers", variable=self.difficulty_numbers)
+        self.checkbox_2.pack(side="left")
 
-        self.lstbox3 = tk.Checkbutton(parent, text="Punctuation", variable=self.difficulty_punctuation)
-        self.lstbox3.pack(side="left")
+        self.checkbox_3 = tk.Checkbutton(parent, text="Punctuation", variable=self.difficulty_punctuation)
+        self.checkbox_3.pack(side="left")
 
-        self.txtbox1 = tk.Entry(parent, textvariable=self.passlength).pack(side="right")
+        self.textbox_1 = tk.Entry(parent, textvariable=self.passlength).pack(side="right")
         self.lbl2 = tk.Label(parent, text="Length :").pack(side="right")
 
     def update_password(self):
-        diffstr = ""
-        if self.difficulty_chars.get() == 1:
-            diffstr += st.ascii_letters
-        if self.difficulty_numbers.get() == 1:
-            diffstr += st.digits
-        if self.difficulty_punctuation.get() == 1:
-            diffstr += st.punctuation
         try:
-            if diffstr == "":
-                password = "Select option"
-            elif int(self.passlength.get()) > 25 or int(self.passlength.get()) < 1:
-                password = "Must be between 1 and 25"
+            if self.passlength.get() < 1:
+                self.passlength.set(1)
+            if self.passlength.get() > 25:
+                self.passlength.set(25)
+
+            diffstr = ''
+            if not self.difficulty_chars.get() and not self.difficulty_numbers.get() and not self.difficulty_punctuation.get():
+                self.difficulty_chars.set(True)
+                messagebox.showerror(title='Error', message="Check atleast one checkbox")
+
+            elif self.difficulty_chars.get():
+                diffstr += st.ascii_letters
+            if self.difficulty_numbers.get():
+                diffstr += st.digits
+            if self.difficulty_punctuation.get():
+                diffstr += st.punctuation
+
+
+
+
             else:
                 password = self.password_gen(list(diffstr), int(self.passlength.get()))
+
+            self.lbl1.config(text=password)
+            self.btn1.config(command=ppc.copy(password))
+            self.lbl1.pack(fill="both")
         except ValueError:
-            password = "Must be a number"
-        self.lbl1.config(text=password)
-        self.btn1.config(command=ppc.copy(password))
-        self.lbl1.pack(fill="both")
-        # print(self.difficulty_chars.get())
-        # print(self.difficulty_numbers.get())
-        # print(self.difficulty_punctuatiom.get())
+            pass
 
     @staticmethod
     def password_gen(chars, length):
