@@ -8,7 +8,7 @@ import pyperclip as ppc
 class MainWindow(tk.Tk):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.geometry('600x150')
+        self.geometry('600x80')
         self.resizable(False, False)
         self.config(bg='white')
         self.title("Password generator")
@@ -20,7 +20,7 @@ class MainApplication(tk.Frame):
         super(MainApplication, self).__init__()
         # self.parent = parent
         self.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        self.configure(bg='lightgreen')
+        self.config(bg='white')
 
         self.passlength = tk.IntVar(parent, value=20)
 
@@ -29,19 +29,19 @@ class MainApplication(tk.Frame):
         self.difficulty_punctuation = tk.BooleanVar(parent)
 
         self.lbl_1 = tk.Label(parent, text=None, font=(
-            'Calibri', 25, 'bold'), bg='white')
+            'Helvetica', 30), bg='white')
 
-        self.lbl_1.pack(fill=tk.BOTH)
+        self.lbl_1.pack(side=tk.TOP)
 
-        self.btn_3 = tk.Button(parent, text='Exit', command=parent.destroy, bg='lightgreen')
-        self.btn_3.pack(side=tk.BOTTOM, fill=tk.X)
+        self.btn_3 = tk.Button(parent, text='Exit', command=parent.destroy, bg='lightgreen', width=10)
+        self.btn_3.pack(side=tk.LEFT)
 
         self.btn_1 = tk.Button(parent)
-        self.btn_1.config(text="Copy", bg='lightgreen')
-        self.btn_1.pack(side=tk.BOTTOM, fill=tk.X)
+        self.btn_1.config(text="Copy", bg='lightgreen', width=10)
+        self.btn_1.pack(side=tk.LEFT)
 
-        self.btn_2 = tk.Button(parent, text="Generate", command=self.update_password, bg='lightgreen')
-        self.btn_2.pack(side=tk.BOTTOM, fill=tk.X)
+        self.btn_2 = tk.Button(parent, text="Generate", command=self.update_password, bg='lightgreen', width=10)
+        self.btn_2.pack(side=tk.LEFT)
 
         self.checkbox_1 = tk.Checkbutton(parent, text="Characters", variable=self.difficulty_chars)
         self.checkbox_1.pack(side=tk.LEFT)
@@ -52,10 +52,10 @@ class MainApplication(tk.Frame):
         self.checkbox_3 = tk.Checkbutton(parent, text="Punctuation", variable=self.difficulty_punctuation)
         self.checkbox_3.pack(side=tk.LEFT)
 
-        self.lbl_2 = tk.Label(parent, textvariable=self.passlength).pack(side=tk.LEFT)
+        self.lbl_2 = tk.Label(parent, textvariable=self.passlength, width=2, height=2).pack(side=tk.LEFT)
         # self.lbl2 = tk.Label(parent, text="Length :").pack(side="right")
 
-        self.slider_1 = tk.Scale(parent, from_=5, to=25, orient=tk.HORIZONTAL, length=350, width=20,
+        self.slider_1 = tk.Scale(parent, from_=5, to=25, orient=tk.HORIZONTAL, length=85, width=20,
                                  variable=self.passlength, sliderlength=10, bd=0, showvalue=False).pack(side=tk.RIGHT)
 
     def update_password(self):
@@ -74,7 +74,7 @@ class MainApplication(tk.Frame):
         password = self.password_gen(list(diffstr), int(self.passlength.get()))
         self.lbl_1.config(text=password)
         self.btn_1.config(command=ppc.copy(password))
-        self.lbl_1.pack(fill=tk.BOTH)
+        # self.lbl_1.pack()
 
     @staticmethod
     def password_gen(chars, length):
