@@ -14,11 +14,14 @@ class MainWindow(tk.Tk):
 
 
 class MainApplication(tk.Frame):
+
     def __init__(self, parent, *args, **kwargs):
         super(MainApplication, self).__init__()
         self.parent = parent
         self.pack(side="top", fill="both", expand=True)
         self.configure(bg='lightgreen')
+
+        self.passlength = tk.StringVar()
 
         self.difficulty_chars = tk.IntVar()
         self.difficulty_numbers = tk.IntVar()
@@ -48,6 +51,9 @@ class MainApplication(tk.Frame):
         self.lstbox3 = tk.Checkbutton(parent, text="Punctuation", variable=self.difficulty_punctuation)
         self.lstbox3.pack(side="left")
 
+        self.txtbox1 = tk.Entry(parent, textvariable=self.passlength).pack(side="right")
+        self.lbl2 = tk.Label(parent, text="Length :").pack(side="right")
+
     def update_password(self):
         diffstr = ""
         if self.difficulty_chars.get() == 1:
@@ -56,12 +62,15 @@ class MainApplication(tk.Frame):
             diffstr += st.digits
         if self.difficulty_punctuation.get() == 1:
             diffstr += st.punctuation
-
-        if diffstr == "":
-            password = "Select option"
-        else:
-            password = self.password_gen(list(diffstr))
-
+        try:
+            if diffstr == "":
+                password = "Select option"
+            elif int(self.passlength.get()) > 25 or int(self.passlength.get()) < 1:
+                password = "Must be between 1 and 25"
+            else:
+                password = self.password_gen(list(diffstr), int(self.passlength.get()))
+        except ValueError:
+            password = "Must be a number"
         self.lbl1.config(text=password)
         self.btn1.config(command=ppc.copy(password))
         self.lbl1.pack(fill="both")
@@ -69,14 +78,13 @@ class MainApplication(tk.Frame):
         # print(self.difficulty_numbers.get())
         # print(self.difficulty_punctuatiom.get())
 
-
     @staticmethod
-    def password_gen(chars):
+    def password_gen(chars, length):
         password_str = ''
 
         # chars = list(st.printable)
 
-        for i in range(20):
+        for i in range(length):
             password_str += chars[random.randint(0, len(chars) - 1)]
 
         return password_str
