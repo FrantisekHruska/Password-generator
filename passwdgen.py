@@ -81,12 +81,8 @@ class MainApplication(tk.Frame):
     @staticmethod
     def password_gen(chars, length):
         password_str = ''
-
-        # chars = list(st.printable)
-
         for i in range(length):
             password_str += chars[random.randint(0, len(chars) - 1)]
-
         return password_str
 
 
