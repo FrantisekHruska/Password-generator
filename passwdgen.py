@@ -57,26 +57,23 @@ class MainApplication(tk.Frame):
 
     def update_password(self):
         try:
-            if self.passlength.get() < 1:
-                self.passlength.set(1)
-            if self.passlength.get() > 25:
-                self.passlength.set(25)
 
             diffstr = ''
             if not self.difficulty_chars.get() and not self.difficulty_numbers.get() and not self.difficulty_punctuation.get():
                 self.difficulty_chars.set(True)
                 messagebox.showerror(title='Error', message="Check atleast one checkbox")
 
-            elif self.difficulty_chars.get():
+            if self.difficulty_chars.get():
                 diffstr += st.ascii_letters
             if self.difficulty_numbers.get():
                 diffstr += st.digits
             if self.difficulty_punctuation.get():
                 diffstr += st.punctuation
 
-
-
-
+            if self.passlength.get() < 1:
+                self.passlength.set(1)
+            if self.passlength.get() > 25:
+                self.passlength.set(25)
             else:
                 password = self.password_gen(list(diffstr), int(self.passlength.get()))
 
