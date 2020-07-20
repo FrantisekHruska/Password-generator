@@ -56,38 +56,32 @@ class MainApplication(tk.Frame):
         self.lbl2 = tk.Label(parent, text="Length :").pack(side="right")
 
     def update_password(self):
+        diffstr = ''
+        if not self.difficulty_chars.get() and not self.difficulty_numbers.get() and not self.difficulty_punctuation.get():
+            self.difficulty_chars.set(True)
+            messagebox.showerror(title='Error', message="Check at least one checkbox")
+
+        if self.difficulty_chars.get():
+            diffstr += st.ascii_letters
+        if self.difficulty_numbers.get():
+            diffstr += st.digits
+        if self.difficulty_punctuation.get():
+            diffstr += st.punctuation
+
         try:
-
-            diffstr = ''
-            if not self.difficulty_chars.get() and not self.difficulty_numbers.get() and not self.difficulty_punctuation.get():
-                self.difficulty_chars.set(True)
-                messagebox.showerror(title='Error', message="Check atleast one checkbox")
-
-            if self.difficulty_chars.get():
-                diffstr += st.ascii_letters
-            if self.difficulty_numbers.get():
-                diffstr += st.digits
-            if self.difficulty_punctuation.get():
-                diffstr += st.punctuation
-
-            try:
-                if self.passlength.get() < 1:
-                    self.passlength.set(1)
-                if self.passlength.get() > 25:
-                    self.passlength.set(25)
-
-                else:
-                    password = self.password_gen(list(diffstr), int(self.passlength.get()))
-                    self.lbl1.config(text=password)
-                    self.btn1.config(command=ppc.copy(password))
-                    self.lbl1.pack(fill="both")
-            except:
+            if self.passlength.get() < 1:
                 self.passlength.set(1)
-                messagebox.showwarning(title="Error",message="Invalid length")
+            if self.passlength.get() > 25:
+                self.passlength.set(25)
 
-
-        except ValueError:
-            pass
+            else:
+                password = self.password_gen(list(diffstr), int(self.passlength.get()))
+                self.lbl1.config(text=password)
+                self.btn1.config(command=ppc.copy(password))
+                self.lbl1.pack(fill="both")
+        except:
+            self.passlength.set(1)
+            messagebox.showwarning(title="Error", message="Invalid length")
 
     @staticmethod
     def password_gen(chars, length):
