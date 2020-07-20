@@ -22,7 +22,7 @@ class MainApplication(tk.Frame):
 
         self.difficulty_chars = tk.IntVar()
         self.difficulty_numbers = tk.IntVar()
-        self.difficulty_punctuatiom = tk.IntVar()
+        self.difficulty_punctuation = tk.IntVar()
 
         self.lbl1 = tk.Label(parent, text=None, font=(
             'Calibri', 25, 'bold'), bg='white')
@@ -45,11 +45,23 @@ class MainApplication(tk.Frame):
         self.lstbox2 = tk.Checkbutton(parent, text="Numbers", variable=self.difficulty_numbers)
         self.lstbox2.pack(side="left")
 
-        self.lstbox3 = tk.Checkbutton(parent, text="Punctuation", variable=self.difficulty_punctuatiom)
+        self.lstbox3 = tk.Checkbutton(parent, text="Punctuation", variable=self.difficulty_punctuation)
         self.lstbox3.pack(side="left")
 
     def update_password(self):
-        password = self.password_gen(list(st.digits + st.ascii_letters + st.punctuation))
+        diffstr = ""
+        if self.difficulty_chars.get() == 1:
+            diffstr += st.ascii_letters
+        if self.difficulty_numbers.get() == 1:
+            diffstr += st.digits
+        if self.difficulty_punctuation.get() == 1:
+            diffstr += st.punctuation
+
+        if diffstr == "":
+            password = "Select option"
+        else:
+            password = self.password_gen(list(diffstr))
+
         self.lbl1.config(text=password)
         self.btn1.config(command=ppc.copy(password))
         self.lbl1.pack(fill="both")
