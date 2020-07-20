@@ -70,16 +70,22 @@ class MainApplication(tk.Frame):
             if self.difficulty_punctuation.get():
                 diffstr += st.punctuation
 
-            if self.passlength.get() < 1:
-                self.passlength.set(1)
-            if self.passlength.get() > 25:
-                self.passlength.set(25)
-            else:
-                password = self.password_gen(list(diffstr), int(self.passlength.get()))
+            try:
+                if self.passlength.get() < 1:
+                    self.passlength.set(1)
+                if self.passlength.get() > 25:
+                    self.passlength.set(25)
 
-            self.lbl1.config(text=password)
-            self.btn1.config(command=ppc.copy(password))
-            self.lbl1.pack(fill="both")
+                else:
+                    password = self.password_gen(list(diffstr), int(self.passlength.get()))
+                    self.lbl1.config(text=password)
+                    self.btn1.config(command=ppc.copy(password))
+                    self.lbl1.pack(fill="both")
+            except:
+                self.passlength.set(1)
+                messagebox.showwarning(title="Error",message="Invalid length")
+
+
         except ValueError:
             pass
 
