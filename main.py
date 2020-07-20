@@ -8,7 +8,7 @@ import pyperclip as ppc
 class MainWindow(tk.Tk):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.geometry('800x150')
+        self.geometry('600x150')
         self.resizable(False, False)
         self.config(bg='white')
         self.title("Password generator")
@@ -18,8 +18,8 @@ class MainApplication(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super(MainApplication, self).__init__()
-        self.parent = parent
-        self.pack(side="top", fill="both", expand=True)
+        # self.parent = parent
+        self.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self.configure(bg='lightgreen')
 
         self.passlength = tk.IntVar(parent, value=20)
@@ -28,32 +28,35 @@ class MainApplication(tk.Frame):
         self.difficulty_numbers = tk.BooleanVar(parent, value=True)
         self.difficulty_punctuation = tk.BooleanVar(parent)
 
-        self.lbl1 = tk.Label(parent, text=None, font=(
+        self.lbl_1 = tk.Label(parent, text=None, font=(
             'Calibri', 25, 'bold'), bg='white')
 
-        self.lbl1.pack(fill="both")
+        self.lbl_1.pack(fill=tk.BOTH)
 
-        self.btn3 = tk.Button(parent, text='Exit', command=parent.destroy, bg='lightgreen')
-        self.btn3.pack(side="bottom", fill='x')
+        self.btn_3 = tk.Button(parent, text='Exit', command=parent.destroy, bg='lightgreen')
+        self.btn_3.pack(side=tk.BOTTOM, fill=tk.X)
 
-        self.btn1 = tk.Button(parent)
-        self.btn1.config(text="Copy", bg='lightgreen')
-        self.btn1.pack(side="bottom", fill='x')
+        self.btn_1 = tk.Button(parent)
+        self.btn_1.config(text="Copy", bg='lightgreen')
+        self.btn_1.pack(side=tk.BOTTOM, fill=tk.X)
 
-        self.btn2 = tk.Button(parent, text="Generate", command=self.update_password, bg='lightgreen')
-        self.btn2.pack(side="bottom", fill='x')
+        self.btn_2 = tk.Button(parent, text="Generate", command=self.update_password, bg='lightgreen')
+        self.btn_2.pack(side=tk.BOTTOM, fill=tk.X)
 
         self.checkbox_1 = tk.Checkbutton(parent, text="Characters", variable=self.difficulty_chars)
-        self.checkbox_1.pack(side="left")
+        self.checkbox_1.pack(side=tk.LEFT)
 
         self.checkbox_2 = tk.Checkbutton(parent, text="Numbers", variable=self.difficulty_numbers)
-        self.checkbox_2.pack(side="left")
+        self.checkbox_2.pack(side=tk.LEFT)
 
         self.checkbox_3 = tk.Checkbutton(parent, text="Punctuation", variable=self.difficulty_punctuation)
-        self.checkbox_3.pack(side="left")
+        self.checkbox_3.pack(side=tk.LEFT)
 
-        self.textbox_1 = tk.Entry(parent, textvariable=self.passlength).pack(side="right")
-        self.lbl2 = tk.Label(parent, text="Length :").pack(side="right")
+        self.lbl_2 = tk.Label(parent, textvariable=self.passlength).pack(side=tk.LEFT)
+        # self.lbl2 = tk.Label(parent, text="Length :").pack(side="right")
+
+        self.slider_1 = tk.Scale(parent, from_=5, to=25, orient=tk.HORIZONTAL, length=350, width=20,
+                                 variable=self.passlength, sliderlength=10, bd=0, showvalue=False).pack(side=tk.RIGHT)
 
     def update_password(self):
         diffstr = ''
@@ -68,20 +71,10 @@ class MainApplication(tk.Frame):
         if self.difficulty_punctuation.get():
             diffstr += st.punctuation
 
-        try:
-            if self.passlength.get() < 1:
-                self.passlength.set(1)
-            if self.passlength.get() > 25:
-                self.passlength.set(25)
-
-            else:
-                password = self.password_gen(list(diffstr), int(self.passlength.get()))
-                self.lbl1.config(text=password)
-                self.btn1.config(command=ppc.copy(password))
-                self.lbl1.pack(fill="both")
-        except:
-            self.passlength.set(1)
-            messagebox.showwarning(title="Error", message="Invalid length")
+        password = self.password_gen(list(diffstr), int(self.passlength.get()))
+        self.lbl_1.config(text=password)
+        self.btn_1.config(command=ppc.copy(password))
+        self.lbl_1.pack(fill=tk.BOTH)
 
     @staticmethod
     def password_gen(chars, length):
