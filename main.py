@@ -8,7 +8,7 @@ import pyperclip as ppc
 class MainWindow(tk.Tk):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.geometry('600x80')
+        self.geometry('620x80')
         self.resizable(False, False)
         self.config(bg='white')
         self.title("Password generator")
@@ -60,9 +60,6 @@ class MainApplication(tk.Frame):
 
     def update_password(self):
         diffstr = ''
-        if not self.difficulty_chars.get() and not self.difficulty_numbers.get() and not self.difficulty_punctuation.get():
-            self.difficulty_chars.set(True)
-            messagebox.showerror(title='Error', message="Check at least one checkbox")
 
         if self.difficulty_chars.get():
             diffstr += st.ascii_letters
@@ -71,10 +68,13 @@ class MainApplication(tk.Frame):
         if self.difficulty_punctuation.get():
             diffstr += st.punctuation
 
-        password = self.password_gen(list(diffstr), int(self.passlength.get()))
-        self.lbl_1.config(text=password)
-        self.btn_1.config(command=ppc.copy(password))
-        # self.lbl_1.pack()
+        try:
+            password = self.password_gen(list(diffstr), int(self.passlength.get()))
+            self.lbl_1.config(text=password)
+            self.btn_1.config(command=ppc.copy(password))
+        except ValueError:
+            self.difficulty_chars.set(True)
+            messagebox.showerror(title='Error', message="Check at least one checkbox")
 
     @staticmethod
     def password_gen(chars, length):
