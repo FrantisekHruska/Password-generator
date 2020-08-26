@@ -2,22 +2,26 @@ import random
 import string as st
 import tkinter as tk
 from tkinter import messagebox
+from sys import platform
 import pyperclip as ppc
 
 
 class MainWindow(tk.Tk):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.geometry('620x80')
+        self.geometry('700x80')
         self.resizable(False, False)
         self.config(bg='white')
-        self.iconbitmap('./img/key.ico')
         self.title("Password generator")
+
+        if platform == 'win32':
+            self.iconbitmap('./img/key.ico')
+            self.geometry('620x80')
 
 
 class MainApplication(tk.Frame):
 
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent):
         super(MainApplication, self).__init__()
 
         self.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -57,7 +61,8 @@ class MainApplication(tk.Frame):
         # self.lbl2 = tk.Label(parent, text="Length :").pack(side="right")
 
         self.slider_1 = tk.Scale(parent, from_=5, to=25, orient=tk.HORIZONTAL, length=85, width=20,
-                                 variable=self.password_length, sliderlength=10, bd=0, showvalue=False).pack(side=tk.RIGHT)
+                                 variable=self.password_length, sliderlength=10, bd=0, showvalue=False).pack(
+            side=tk.RIGHT)
         # self.update_password()
 
     def update_password(self):
